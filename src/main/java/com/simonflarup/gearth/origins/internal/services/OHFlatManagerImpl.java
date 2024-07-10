@@ -3,10 +3,12 @@ package com.simonflarup.gearth.origins.internal.services;
 import com.google.common.eventbus.Subscribe;
 import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectAddedEvent;
 import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectRemovedEvent;
+import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectUpdatedEvent;
 import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectsLoadedEvent;
 import com.simonflarup.gearth.origins.events.flat.OnFlatInfoEvent;
 import com.simonflarup.gearth.origins.events.item.OnItemAddedEvent;
 import com.simonflarup.gearth.origins.events.item.OnItemRemovedEvent;
+import com.simonflarup.gearth.origins.events.item.OnItemUpdatedEvent;
 import com.simonflarup.gearth.origins.events.item.OnItemsLoadedEvent;
 import com.simonflarup.gearth.origins.internal.events.EventSubscriber;
 import com.simonflarup.gearth.origins.models.incoming.navigator.OHFlatInfo;
@@ -50,10 +52,17 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onItemAddedEvent(OnItemAddedEvent event) {
-        OHItem item = event.getItem();
-        itemsInFlat.put(item.getId(), item);
+        addItem(event.getItem());
     }
 
+    @Subscribe
+    void onItemUpdatedEvent(OnItemUpdatedEvent event) {
+        addItem(event.getItem());
+    }
+
+    private void addItem(OHItem item) {
+        itemsInFlat.put(item.getId(), item);
+    }
 
     @Subscribe
     void onItemRemovedEvent(OnItemRemovedEvent event) {
@@ -62,6 +71,7 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onItemsLoadedEvent(OnItemsLoadedEvent event) {
+        itemsInFlat.clear();
         for (OHItem item : event.getItems()) {
             itemsInFlat.put(item.getId(), item);
         }
@@ -69,8 +79,15 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onActiveObjectAddedEvent(OnActiveObjectAddedEvent event) {
-        OHActiveObject activeObject = event.getActiveObject();
+        addActiveObject(event.getActiveObject());
+    }
 
+    @Subscribe
+    void onActiveObjectUpdatedEvent(OnActiveObjectUpdatedEvent event) {
+        addActiveObject(event.getActiveObject());
+    }
+
+    private void addActiveObject(OHActiveObject activeObject) {
         activeObjectsInFlat.put(activeObject.getId(), activeObject);
     }
 
@@ -82,6 +99,7 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onActiveObjectsLoaded(OnActiveObjectsLoadedEvent event) {
+        activeObjectsInFlat.clear();
         for (OHActiveObject activeObject : event.getActiveObjects()) {
             activeObjectsInFlat.put(activeObject.getId(), activeObject);
         }
