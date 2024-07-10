@@ -11,6 +11,7 @@ import com.simonflarup.gearth.origins.services.OHFlatManager;
 import com.simonflarup.gearth.origins.services.OHFlatManagerImpl;
 import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.extensions.Extension;
+import gearth.extensions.ExtensionBase;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
@@ -52,11 +53,13 @@ public abstract class OHExtension extends Extension {
         interceptToClient("ACTIVEOBJECT_REMOVE", ActiveObjectsIntercept::onActiveObjectsRemove);
         interceptToClient("STUFFDATAUPDATE", ActiveObjectsIntercept::onStuffDataUpdate);
         interceptToClient("FLATINFO", FlatIntercept::onFlatInfo);
-        intercept(HMessage.Direction.TOSERVER, "CHAT", ChatIntercept::onChat);
+
+        // The chat intercept needs the original hMessage to block it from being sent to the server
+        intercept(HMessage.Direction.TOSERVER, "CHAT", safeInvoke(ChatIntercept::onChat));
     }
 
     private void interceptToClient(String header, IncomingPacketHandler incomingPacketHandler) {
-        intercept(HMessage.Direction.TOCLIENT, header, (hMessage) -> handleEvent(hMessage, incomingPacketHandler));
+        intercept(HMessage.Direction.TOCLIENT, header, safeInvoke((hMessage) -> handleEvent(hMessage, incomingPacketHandler)));
     }
 
     private void handleEvent(HMessage hMessage, IncomingPacketHandler incomingPacketHandler) {
@@ -67,11 +70,25 @@ public abstract class OHExtension extends Extension {
         incomingPacketHandler.handlePacket(packet);
     }
 
+    private void interceptToServer(String header, OutgoingPacketHandler outgoingPacketHandler) {
+        intercept(HMessage.Direction.TOSERVER, header, safeInvoke((hMessage) -> handleEvent(hMessage, outgoingPacketHandler)));
+    }
+
     private void handleEvent(HMessage hMessage, OutgoingPacketHandler outgoingPacketHandler) {
         ShockPacketOutgoing packet = ShockPacketUtils.getShockPacketOutgoingFromMessage(hMessage);
         if (packet == null) {
             return;
         }
         outgoingPacketHandler.handlePacket(packet);
+    }
+
+    private static ExtensionBase.MessageListener safeInvoke(ExtensionBase.MessageListener listener) {
+        return (hMessage -> {
+            try {
+                listener.act(hMessage);
+            } catch (Exception e) {
+                log.error("Unhandled exception in interceptor", e);
+            }
+        });
     }
 }
