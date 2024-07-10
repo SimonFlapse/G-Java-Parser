@@ -7,8 +7,8 @@ import com.simonflarup.gearth.origins.intercepts.ActiveObjectsIntercept;
 import com.simonflarup.gearth.origins.intercepts.ChatIntercept;
 import com.simonflarup.gearth.origins.intercepts.FlatIntercept;
 import com.simonflarup.gearth.origins.intercepts.ItemsIntercept;
-import com.simonflarup.gearth.origins.services.OHFlatManager;
-import com.simonflarup.gearth.origins.services.OHFlatManagerImpl;
+import com.simonflarup.gearth.origins.services.OHServiceProvider;
+import com.simonflarup.gearth.origins.services.internal.OHServiceProviderImpl;
 import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.extensions.Extension;
 import gearth.extensions.ExtensionBase;
@@ -21,13 +21,16 @@ import java.util.Objects;
 
 @Slf4j
 public abstract class OHExtension extends Extension {
+    private final OHServiceProvider serviceProvider;
+
     protected OHExtension(String[] args) {
         super(args);
         EventSystem.register(this);
+        serviceProvider = new OHServiceProviderImpl();
     }
 
-    public OHFlatManager getFlatManager() {
-        return OHFlatManagerImpl.getInstance();
+    public OHServiceProvider getServiceProvider() {
+        return serviceProvider;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.simonflarup.gearth.origins.services;
+package com.simonflarup.gearth.origins.services.internal;
 
 import com.google.common.eventbus.Subscribe;
 import com.simonflarup.gearth.origins.events.EventSystem;
@@ -12,6 +12,7 @@ import com.simonflarup.gearth.origins.events.type.item.OnItemsLoadedEvent;
 import com.simonflarup.gearth.origins.models.incoming.navigator.OHFlatInfo;
 import com.simonflarup.gearth.origins.models.incoming.room.OHActiveObject;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
+import com.simonflarup.gearth.origins.services.OHFlatManager;
 import lombok.Getter;
 
 import java.util.Map;
@@ -21,15 +22,15 @@ import java.util.concurrent.ConcurrentMap;
 public class OHFlatManagerImpl implements OHFlatManager {
     private static OHFlatManagerImpl INSTANCE;
 
-    public ConcurrentMap<Integer, OHActiveObject> activeObjectsInFlat = new ConcurrentHashMap<>();
-    public ConcurrentMap<Integer, OHItem> itemsInFlat = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, OHActiveObject> activeObjectsInFlat = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, OHItem> itemsInFlat = new ConcurrentHashMap<>();
 
     @Getter
     public OHFlatInfo currentFlatInfo;
 
     private OHFlatManagerImpl() {}
 
-    public static OHFlatManagerImpl getInstance() {
+    static OHFlatManagerImpl getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new OHFlatManagerImpl();
             EventSystem.registerPriority(INSTANCE);
