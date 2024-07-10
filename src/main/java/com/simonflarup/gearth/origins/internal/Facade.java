@@ -27,7 +27,8 @@ public class Facade {
     public static Facade getInstance(InternalExtensionProvider extensionProvider) {
         if (INSTANCE == null) {
             EventSystem eventSystem = new EventSystem(extensionProvider);
-            INSTANCE = new Facade(eventSystem, new OHServiceProviderImpl(eventSystem), new OHInterceptor(eventSystem, extensionProvider));
+            OHContext context = new OHContext(extensionProvider, eventSystem);
+            INSTANCE = new Facade(eventSystem, new OHServiceProviderImpl(eventSystem), new OHInterceptor(context));
         }
         return INSTANCE;
     }

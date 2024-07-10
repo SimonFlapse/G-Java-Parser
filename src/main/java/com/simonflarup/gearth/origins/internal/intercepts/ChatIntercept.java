@@ -1,31 +1,39 @@
 package com.simonflarup.gearth.origins.internal.intercepts;
 
 import com.simonflarup.gearth.origins.events.chat.OnChatEvent;
-import com.simonflarup.gearth.origins.internal.events.EventPublisher;
+import com.simonflarup.gearth.origins.internal.OHContext;
+import com.simonflarup.gearth.origins.models.outgoing.chat.OHChatOut;
 import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
-
-import java.nio.charset.StandardCharsets;
+import lombok.Getter;
+import lombok.ToString;
 
 class ChatIntercept extends AbstractIntercept {
 
-    static void onChat(HMessage hMessage, EventPublisher eventPublisher) {
+    static void onChat(HMessage hMessage, OHContext context) {
         ShockPacketOutgoing packet = ShockPacketUtils.getShockPacketOutgoingFromMessage(hMessage);
         if (packet == null) {
             return;
         }
-        String message = packet.readString(StandardCharsets.ISO_8859_1);
-        eventPublisher.post(new OnChatEvent() {
-            @Override
-            public String getMessage() {
-                return message;
-            }
+        OHChatOut chatOut = new OHChatOut(packet, context.getPacketInfoManager());
+        context.getEventSystem().post(new OnChatEventImpl(chatOut, hMessage));
+    }
 
-            @Override
-            public void silenceMessage() {
-                hMessage.setBlocked(true);
-            }
-        });
+    @ToString(exclude = "hMessage")
+    private static class OnChatEventImpl implements OnChatEvent {
+        @Getter
+        private final OHChatOut chatOut;
+        private final HMessage hMessage;
+
+        public OnChatEventImpl(OHChatOut chatOut, HMessage hMessage) {
+            this.chatOut = chatOut;
+            this.hMessage = hMessage;
+        }
+
+        @Override
+        public void silenceMessage() {
+            hMessage.setBlocked(true);
+        }
     }
 }
