@@ -1,6 +1,5 @@
 package com.simonflarup.gearth.origins.models.incoming.navigator;
 
-import com.simonflarup.gearth.origins.parsers.PacketParser;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @ToString
 @Slf4j
-public class OHFlatInfo extends PacketParser {
+public class OHFlatInfo {
     private final boolean othersCanMoveFurni;
     private final OHFlatLock flatLock;
     private final int flatId;
@@ -25,8 +24,6 @@ public class OHFlatInfo extends PacketParser {
     //#nodeType seems to be missing from the packet but always defaults to 2
 
     public OHFlatInfo(ShockPacketIncoming packet) {
-        super(54, packet);
-
         othersCanMoveFurni = packet.readBoolean();
         flatLock = OHFlatLock.fromValue(packet.readInteger());
         flatId = packet.readInteger();
@@ -42,7 +39,5 @@ public class OHFlatInfo extends PacketParser {
         absoluteMaxVisitors = packet.readInteger();
 
         log.debug(this.toString());
-
-        warnAboutUnparsedData(packet);
     }
 }
