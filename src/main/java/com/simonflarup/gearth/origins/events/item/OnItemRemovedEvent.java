@@ -1,4 +1,4 @@
-package com.simonflarup.gearth.origins.events.type.item;
+package com.simonflarup.gearth.origins.events.item;
 
 public interface OnItemRemovedEvent {
     int getItemId();

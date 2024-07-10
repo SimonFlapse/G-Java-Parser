@@ -1,14 +1,14 @@
-package com.simonflarup.gearth.origins.services.internal;
+package com.simonflarup.gearth.origins.internal.services;
 
 import com.google.common.eventbus.Subscribe;
-import com.simonflarup.gearth.origins.events.EventSystem;
-import com.simonflarup.gearth.origins.events.type.activeobject.OnActiveObjectAddedEvent;
-import com.simonflarup.gearth.origins.events.type.activeobject.OnActiveObjectRemovedEvent;
-import com.simonflarup.gearth.origins.events.type.activeobject.OnActiveObjectsLoadedEvent;
-import com.simonflarup.gearth.origins.events.type.flat.OnFlatInfoEvent;
-import com.simonflarup.gearth.origins.events.type.item.OnItemAddedEvent;
-import com.simonflarup.gearth.origins.events.type.item.OnItemRemovedEvent;
-import com.simonflarup.gearth.origins.events.type.item.OnItemsLoadedEvent;
+import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectAddedEvent;
+import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectRemovedEvent;
+import com.simonflarup.gearth.origins.events.activeobject.OnActiveObjectsLoadedEvent;
+import com.simonflarup.gearth.origins.events.flat.OnFlatInfoEvent;
+import com.simonflarup.gearth.origins.events.item.OnItemAddedEvent;
+import com.simonflarup.gearth.origins.events.item.OnItemRemovedEvent;
+import com.simonflarup.gearth.origins.events.item.OnItemsLoadedEvent;
+import com.simonflarup.gearth.origins.internal.events.EventSubscriber;
 import com.simonflarup.gearth.origins.models.incoming.navigator.OHFlatInfo;
 import com.simonflarup.gearth.origins.models.incoming.room.OHActiveObject;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
@@ -30,10 +30,10 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     private OHFlatManagerImpl() {}
 
-    static OHFlatManagerImpl getInstance() {
+    static OHFlatManagerImpl getInstance(EventSubscriber eventSubscriber) {
         if (INSTANCE == null) {
             INSTANCE = new OHFlatManagerImpl();
-            EventSystem.registerPriority(INSTANCE);
+            eventSubscriber.registerPriority(INSTANCE);
         }
         return INSTANCE;
     }

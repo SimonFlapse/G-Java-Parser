@@ -1,13 +1,14 @@
-package com.simonflarup.gearth.origins.services.internal;
+package com.simonflarup.gearth.origins.internal.services;
 
+import com.simonflarup.gearth.origins.internal.events.EventSystem;
 import com.simonflarup.gearth.origins.services.OHFlatManager;
 import com.simonflarup.gearth.origins.services.OHServiceProvider;
 
 public class OHServiceProviderImpl implements OHServiceProvider {
     private final OHFlatManager ohFlatManager;
 
-    public OHServiceProviderImpl() {
-        this.ohFlatManager = OHFlatManagerImpl.getInstance();
+    public OHServiceProviderImpl(EventSystem eventSystem) {
+        this.ohFlatManager = OHFlatManagerImpl.getInstance(eventSystem);
     }
 
     @Override

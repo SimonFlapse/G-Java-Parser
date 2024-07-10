@@ -1,4 +1,4 @@
-package com.simonflarup.gearth.origins.events.type.activeobject;
+package com.simonflarup.gearth.origins.events.activeobject;
 
 public interface OnStuffDataUpdatedEvent {
     int getTargetId();

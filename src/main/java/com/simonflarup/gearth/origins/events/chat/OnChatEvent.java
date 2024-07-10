@@ -1,4 +1,4 @@
-package com.simonflarup.gearth.origins.events.type.chat;
+package com.simonflarup.gearth.origins.events.chat;
 
 public interface OnChatEvent {
     String getMessage();

@@ -1,4 +1,4 @@
-package com.simonflarup.gearth.origins.events;
+package com.simonflarup.gearth.origins.internal.events;
 
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 
