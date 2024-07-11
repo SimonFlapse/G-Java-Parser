@@ -1,7 +1,10 @@
 package com.simonflarup.gearth.origins.models.outgoing.chat;
 
+import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
+import com.simonflarup.gearth.origins.utils.ExpressionBuilder;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacket;
+import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import gearth.services.packet_info.PacketInfo;
 import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
@@ -11,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 @Getter
 @ToString
-public class OHChatOut {
+public class OHChatOut implements OHServerPacket {
     private final String message;
     private final OHChatOutType type;
 
@@ -26,5 +29,18 @@ public class OHChatOut {
         }
 
         this.message = message;
+    }
+
+    public OHChatOut(String message, OHChatOutType type) {
+        this.message = message;
+        this.type = type;
+    }
+
+    @Override
+    public ShockPacketOutgoing getOutgoingPacket() {
+        String headerName = this.type == OHChatOutType.SAY ? "CHAT" : this.type.name();
+        ExpressionBuilder builder = ExpressionBuilder.start(HMessage.Direction.TOSERVER, headerName);
+        builder.string(this.message);
+        return new ShockPacketOutgoing(builder.build());
     }
 }

@@ -28,7 +28,7 @@ public class Facade {
         if (INSTANCE == null) {
             EventSystem eventSystem = new EventSystem(extensionProvider);
             OHContext context = new OHContext(extensionProvider, eventSystem);
-            INSTANCE = new Facade(eventSystem, new OHServiceProviderImpl(eventSystem), new OHInterceptor(context));
+            INSTANCE = new Facade(eventSystem, new OHServiceProviderImpl(context), new OHInterceptor(context));
         }
         return INSTANCE;
     }
