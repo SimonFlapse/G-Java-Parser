@@ -1,15 +1,25 @@
 package com.simonflarup.gearth.origins.models.outgoing.chat;
 
+import lombok.Getter;
+
+@Getter
 public enum OHChatOutType {
-    SAY,
-    WHISPER,
-    SHOUT;
+    SAY("CHAT"),
+    WHISPER("WHISPER"),
+    SHOUT("SHOUT");
+
+    private final String outgoingHeaderName;
+
+    OHChatOutType(String outgoingHeaderName) {
+        this.outgoingHeaderName = outgoingHeaderName;
+    }
 
     public static OHChatOutType fromName(String name) {
-        if (name.equalsIgnoreCase("CHAT")) {
-            return SAY;
+        for (OHChatOutType type : values()) {
+            if (type.outgoingHeaderName.equals(name)) {
+                return type;
+            }
         }
-
-        return OHChatOutType.valueOf(name.toUpperCase());
+        return SAY;
     }
 }

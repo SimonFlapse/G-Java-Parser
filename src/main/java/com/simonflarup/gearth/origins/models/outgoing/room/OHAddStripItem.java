@@ -1,9 +1,10 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
 import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
-import com.simonflarup.gearth.origins.utils.ExpressionBuilder;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
+import gearth.services.packet_info.PacketInfo;
+import gearth.services.packet_info.PacketInfoManager;
 
 public class OHAddStripItem implements OHServerPacket {
 
@@ -16,14 +17,11 @@ public class OHAddStripItem implements OHServerPacket {
     }
 
     @Override
-    public ShockPacketOutgoing getOutgoingPacket() {
+    public ShockPacketOutgoing getOutgoingPacket(PacketInfoManager packetInfoManager) {
         String type = this.type.name().toLowerCase();
-        ExpressionBuilder builder = ExpressionBuilder.start(HMessage.Direction.TOSERVER, "ADDSTRIPITEM")
-                .raw("new")
-                .space()
-                .raw(type)
-                .space()
-                .raw(String.valueOf(itemId));
-        return new ShockPacketOutgoing(builder.build());
+        PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, "ADDSTRIPITEM");
+        ShockPacketOutgoing packet = new ShockPacketOutgoing(packetInfo.getHeaderId());
+        packet.appendString(String.format("new %s %d", type, itemId));
+        return packet;
     }
 }

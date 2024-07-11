@@ -1,5 +1,8 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
+import lombok.Getter;
+
+@Getter
 public enum OHObjectDirection {
     EAST(0), // Pointing to the right
     SOUTH_EAST(1), // Pointing directly to the right, diagonally

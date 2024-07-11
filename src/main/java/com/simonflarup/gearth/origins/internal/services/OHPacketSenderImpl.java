@@ -14,6 +14,6 @@ public class OHPacketSenderImpl implements OHPacketSender {
 
     @Override
     public boolean toServer(OHServerPacket packet) {
-        return extension.sendToServer(packet.getOutgoingPacket());
+        return extension.sendToServer(packet.getOutgoingPacket(extension.getPacketInfoManager()));
     }
 }

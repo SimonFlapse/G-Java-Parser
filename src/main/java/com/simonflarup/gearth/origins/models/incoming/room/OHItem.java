@@ -1,6 +1,9 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
+import com.simonflarup.gearth.origins.models.incoming.OHClientPacket;
+import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
+import gearth.services.packet_info.PacketInfo;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -77,5 +80,47 @@ public class OHItem {
 
     public String getFullClassName() {
         return String.format("%s_%s", className, posterId);
+    }
+
+    public OHClientPacket getItemAddPacket() {
+        return (packetInfoManager) -> {
+            PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOCLIENT, "ITEMS_2");
+            ShockPacketIncoming packet = getPacket(packetInfo.getHeaderId());
+            return new ShockPacketIncoming(packet);
+        };
+    }
+
+    public OHClientPacket getActiveObjectUpdatePacket() {
+        return (packetInfoManager) -> {
+            PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOCLIENT, "UPDATEITEM");
+            ShockPacketIncoming packet = getPacket(packetInfo.getHeaderId());
+            return new ShockPacketIncoming(packet);
+        };
+    }
+
+    public OHClientPacket getActiveObjectRemovePacket() {
+        return (packetInfoManager) -> {
+            PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOCLIENT, "REMOVEITEM");
+            ShockPacketIncoming packet = new ShockPacketIncoming(packetInfo.getHeaderId());
+            packet.appendString(String.valueOf(this.id));
+
+            return new ShockPacketIncoming(packet);
+        };
+    }
+
+    private ShockPacketIncoming getPacket(int headerId) {
+        ShockPacketIncoming packet = new ShockPacketIncoming(headerId);
+
+        packet.appendString(String.valueOf(this.id))
+                .appendByte((byte) 9)
+                .appendString(this.className)
+                .appendByte((byte) 9)
+                .appendString(this.owner)
+                .appendByte((byte) 9)
+                .appendString(String.format(":w=%d,%d l=%d,%d %s", wallX, wallY, localX, localY, rightWall ? "r" : "l"))
+                .appendByte((byte) 9)
+                .appendString(this.posterId);
+
+        return packet;
     }
 }
