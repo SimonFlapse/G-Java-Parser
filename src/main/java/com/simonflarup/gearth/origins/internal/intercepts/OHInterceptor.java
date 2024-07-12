@@ -43,9 +43,13 @@ public class OHInterceptor {
 
         OHExtension extension = context.getExtension();
         // The chat intercept needs the original hMessage to block it from being sent to the server
-        extension.intercept(HMessage.Direction.TOSERVER, "CHAT", safeInvoke((message) -> ChatIntercept.onChat(message, context)));
-        extension.intercept(HMessage.Direction.TOSERVER, "WHISPER", safeInvoke((message) -> ChatIntercept.onChat(message, context)));
-        extension.intercept(HMessage.Direction.TOSERVER, "SHOUT", safeInvoke((message) -> ChatIntercept.onChat(message, context)));
+        extension.intercept(HMessage.Direction.TOSERVER, "CHAT", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
+        extension.intercept(HMessage.Direction.TOSERVER, "WHISPER", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
+        extension.intercept(HMessage.Direction.TOSERVER, "SHOUT", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
+
+        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
+        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT_2", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
+        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT_3", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
     }
 
     private void interceptToClient(String header, IncomingPacketHandler incomingPacketHandler) {

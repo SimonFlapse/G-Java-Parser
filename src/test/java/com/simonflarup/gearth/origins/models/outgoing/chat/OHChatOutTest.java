@@ -56,10 +56,10 @@ class OHChatOutTest {
         void whispering() {
             String message = "Whispering a test message";
             String testUser = "TestUser";
-            String lengthEncoding = new String(Base64Encoding.encode(message.length() + testUser.length() + " ".length(), 2), StandardCharsets.ISO_8859_1);
-            OHChatOut chatOut = new OHChatOut("Whispering a test message", OHChatOutType.WHISPER, testUser);
+            OHChatOut chatOut = new OHChatOut(message, OHChatOutType.WHISPER, testUser);
             packet = chatOut.getOutgoingPacket(packetInfoManager);
 
+            String lengthEncoding = new String(Base64Encoding.encode(message.length() + testUser.length() + " ".length(), 2), StandardCharsets.ISO_8859_1);
             String expectedPacket = String.format("%s%s%s %s", WHISPER_HEADER, lengthEncoding, testUser, message);
 
             assertEquals(expectedPacket, packet.toString());
@@ -81,12 +81,17 @@ class OHChatOutTest {
         }
 
         private void assertOutgoingPacket(String message, OHChatOutType type) {
-            String lengthEncoding = new String(Base64Encoding.encode(message.length(), 2), StandardCharsets.ISO_8859_1);
             OHChatOut chatOut = new OHChatOut(message, type);
             packet = chatOut.getOutgoingPacket(packetInfoManager);
 
             String expectedHeader = type == OHChatOutType.SAY ? SAY_HEADER : type == OHChatOutType.WHISPER ? WHISPER_HEADER : SHOUT_HEADER;
 
+            // Whisper messages have a space separator between the target user and the message
+            // the parser needs to add this space even if no target user has been set
+            if (type == OHChatOutType.WHISPER) {
+                message = " " + message;
+            }
+            String lengthEncoding = new String(Base64Encoding.encode(message.length(), 2), StandardCharsets.ISO_8859_1);
             String expectedPacket = String.format("%s%s%s", expectedHeader, lengthEncoding, message);
 
             assertEquals(expectedPacket, packet.toString());
