@@ -41,6 +41,8 @@ public class OHInterceptor {
         interceptToClient("STUFFDATAUPDATE", (message) -> ActiveObjectsIntercept.onStuffDataUpdate(message, context));
         interceptToClient("FLATINFO", (message) -> FlatIntercept.onFlatInfo(message, context));
 
+        interceptToServer("ADDSTRIPITEM", (message) -> StripIntercept.onAddStripItem(message, context));
+
         OHExtension extension = context.getExtension();
         // The chat intercept needs the original hMessage to block it from being sent to the server
         extension.intercept(HMessage.Direction.TOSERVER, "CHAT", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
