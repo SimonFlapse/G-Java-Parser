@@ -5,6 +5,10 @@ import gearth.protocol.HPacket;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 
+/**
+ * <h3>Utility class for ShockPacket-related operations.</h3>
+ * <p>Primarily used for class casting.</p>
+ */
 public final class ShockPacketUtils {
     private ShockPacketUtils() {}
 
