@@ -41,6 +41,8 @@ public class OHInterceptor {
         interceptToServer("GETSTRIP", StripIntercept::onGetStrip);
         interceptToClient("STRIPINFO_2", StripIntercept::onStripInfo);
 
+        interceptToServer("PLACESTUFF", StuffIntercept::onPlaceStuff);
+
         interceptToServer("CHAT", ChatIntercept::onChatOut);
         interceptToServer("WHISPER", ChatIntercept::onChatOut);
         interceptToServer("SHOUT", ChatIntercept::onChatOut);
