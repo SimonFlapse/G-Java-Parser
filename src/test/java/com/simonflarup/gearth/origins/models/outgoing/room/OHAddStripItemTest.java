@@ -77,17 +77,15 @@ class OHAddStripItemTest {
         }
 
         private void assertShockPacketParsing(int itemId, OHStripItemType type) {
-            OHAddStripItem addStripItem = new OHAddStripItem(getAddStripItemOutPackage(itemId, type));
+            OHAddStripItem addStripItem = new OHAddStripItem(getAddStripItemPackage(itemId, type));
 
             assertEquals(itemId, addStripItem.getItemId());
             assertEquals(type, addStripItem.getType());
         }
 
-        private ShockPacketOutgoing getAddStripItemOutPackage(int itemId, OHStripItemType type) {
+        private ShockPacketOutgoing getAddStripItemPackage(int itemId, OHStripItemType type) {
             OHAddStripItem addStripItem = new OHAddStripItem(itemId, type);
             return addStripItem.getOutgoingPacket(packetInfoManager);
         }
     }
-
-    ;
 }
