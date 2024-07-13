@@ -3,6 +3,8 @@ package com.simonflarup.gearth.origins;
 import com.simonflarup.gearth.origins.internal.Facade;
 import com.simonflarup.gearth.origins.services.OHServiceProvider;
 import gearth.extensions.Extension;
+import gearth.protocol.HMessage;
+import gearth.protocol.HPacket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -77,5 +79,65 @@ public abstract class OHExtension extends Extension {
         });
 
         facade.setupInterceptors();
+    }
+
+    /**
+     * <h2>Deprecated</h2>
+     * <h3>Send raw packet to server</h3>
+     *
+     * @deprecated Use {@link OHServiceProvider#getPacketSender()} to send packets to the server available from the {@link #getServiceProvider()} method
+     */
+    @Deprecated
+    @Override
+    public boolean sendToServer(HPacket packet) {
+        return super.sendToServer(packet);
+    }
+
+    /**
+     * <h2>Deprecated</h2>
+     * <h3>Send raw packet to client</h3>
+     *
+     * @deprecated Use {@link OHServiceProvider#getPacketSender()} to send packets to the client available from the {@link #getServiceProvider()} method
+     */
+    @Deprecated
+    @Override
+    public boolean sendToClient(HPacket packet) {
+        return super.sendToClient(packet);
+    }
+
+    /**
+     * <h2>Deprecated</h2>
+     * <h3>Intercept messages</h3>
+     *
+     * @deprecated Use the {@link com.google.common.eventbus.Subscribe} annotation to subscribe to events instead. See the {@link OHExtension} documentation for more information
+     */
+    @Deprecated
+    @Override
+    public void intercept(HMessage.Direction direction, MessageListener messageListener) {
+        super.intercept(direction, messageListener);
+    }
+
+    /**
+     * <h2>Deprecated</h2>
+     * <h3>Intercept messages</h3>
+     *
+     * @deprecated Use the {@link com.google.common.eventbus.Subscribe} annotation to subscribe to events instead. See the {@link OHExtension} documentation for more information
+     */
+    @Deprecated
+    @Override
+    public void intercept(HMessage.Direction direction, int headerId, MessageListener messageListener) {
+        super.intercept(direction, headerId, messageListener);
+    }
+
+    /**
+     * <h2>Deprecated</h2>
+     * <h3>Intercept messages</h3>
+     *
+     * @deprecated Use the {@link com.google.common.eventbus.Subscribe} annotation to subscribe to events instead. See the {@link OHExtension} documentation for more information
+     */
+    @Deprecated
+    @Override
+    public void intercept(HMessage.Direction direction, String hashOrName, MessageListener messageListener) {
+        super.intercept(direction, hashOrName, messageListener);
     }
 }
