@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
+import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import gearth.services.packet_info.PacketInfo;
@@ -9,7 +10,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class OHAcceptTrade {
+public class OHAcceptTrade implements OHServerPacket {
     private final OHAcceptTradeType type;
 
     public OHAcceptTrade(ShockPacketOutgoing packet, PacketInfoManager packetInfoManager) {
@@ -20,6 +21,12 @@ public class OHAcceptTrade {
 
     public OHAcceptTrade(OHAcceptTradeType type) {
         this.type = type;
+    }
+
+    @Override
+    public ShockPacketOutgoing getOutgoingPacket(PacketInfoManager packetInfoManager) {
+        PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, this.type == OHAcceptTradeType.ACCEPT ? "TRADE_ACCEPT" : "TRADE_UNACCEPT");
+        return new ShockPacketOutgoing(packetInfo.getHeaderId());
     }
 
     public enum OHAcceptTradeType {

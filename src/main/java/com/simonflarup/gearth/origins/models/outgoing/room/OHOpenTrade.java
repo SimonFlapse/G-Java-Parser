@@ -1,12 +1,18 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
+import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
+import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
+import gearth.services.packet_info.PacketInfo;
+import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.nio.charset.StandardCharsets;
+
 @Getter
 @ToString
-public class OHOpenTrade {
+public class OHOpenTrade implements OHServerPacket {
     private final int targetId;
 
     public OHOpenTrade(ShockPacketOutgoing packet) {
@@ -17,5 +23,13 @@ public class OHOpenTrade {
 
     public OHOpenTrade(int targetId) {
         this.targetId = targetId;
+    }
+
+    @Override
+    public ShockPacketOutgoing getOutgoingPacket(PacketInfoManager packetInfoManager) {
+        PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, "TRADE_OPEN");
+        ShockPacketOutgoing packet = new ShockPacketOutgoing(packetInfo.getHeaderId());
+        packet.appendBytes(String.valueOf(this.targetId).getBytes(StandardCharsets.ISO_8859_1));
+        return packet;
     }
 }
