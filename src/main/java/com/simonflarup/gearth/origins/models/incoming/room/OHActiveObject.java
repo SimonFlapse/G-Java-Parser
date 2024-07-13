@@ -8,9 +8,7 @@ import gearth.services.packet_info.PacketInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @ToString
 @Getter
 public class OHActiveObject {
@@ -41,7 +39,6 @@ public class OHActiveObject {
         this.runtimeData = packet.readString();
         this.extra = packet.readInteger();
         this.stuffData = packet.readString();
-        log.debug(this.toString());
     }
 
     public static OHActiveObject[] parse(ShockPacket packet) {

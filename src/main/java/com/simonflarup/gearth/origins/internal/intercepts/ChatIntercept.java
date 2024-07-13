@@ -3,66 +3,35 @@ package com.simonflarup.gearth.origins.internal.intercepts;
 import com.simonflarup.gearth.origins.events.chat.OnChatInEvent;
 import com.simonflarup.gearth.origins.events.chat.OnChatOutEvent;
 import com.simonflarup.gearth.origins.internal.OHContext;
+import com.simonflarup.gearth.origins.internal.packets.OHMessageIn;
+import com.simonflarup.gearth.origins.internal.packets.OHMessageOut;
 import com.simonflarup.gearth.origins.models.incoming.chat.OHChatIn;
 import com.simonflarup.gearth.origins.models.outgoing.chat.OHChatOut;
-import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
-import gearth.protocol.HMessage;
-import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
-import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
-import lombok.Getter;
-import lombok.ToString;
 
 class ChatIntercept extends AbstractIntercept {
 
-    static void onChatIn(HMessage hMessage, OHContext context) {
-        ShockPacketIncoming packetIncoming = ShockPacketUtils.getShockPacketIncomingFromMessage(hMessage);
-        if (packetIncoming == null) {
-            return;
-        }
-        OHChatIn chatIn = new OHChatIn(packetIncoming, context.getPacketInfoManager());
-        context.getEventSystem().post(new OnChatInEventImpl(chatIn, hMessage));
+    static void onChatIn(OHMessageIn message) {
+        OHContext context = message.getContext();
+        OHChatIn chatIn = new OHChatIn(message.getPacket(), context.getPacketInfoManager());
+        context.getEventSystem().post(new OnChatInEventImpl(chatIn, message));
     }
 
-    static void onChatOut(HMessage hMessage, OHContext context) {
-        ShockPacketOutgoing packet = ShockPacketUtils.getShockPacketOutgoingFromMessage(hMessage);
-        if (packet == null) {
-            return;
-        }
-        OHChatOut chatOut = new OHChatOut(packet, context.getPacketInfoManager());
-        context.getEventSystem().post(new OnChatOutEventImpl(chatOut, hMessage));
+    static void onChatOut(OHMessageOut message) {
+        OHContext context = message.getContext();
+        OHChatOut chatOut = new OHChatOut(message.getPacket(), context.getPacketInfoManager());
+        context.getEventSystem().post(new OnChatOutEventImpl(chatOut, message));
     }
 
-    @ToString(exclude = "hMessage")
-    private static class OnChatOutEventImpl implements OnChatOutEvent {
-        @Getter
-        private final OHChatOut chatOut;
-        private final HMessage hMessage;
+    private static class OnChatInEventImpl extends OHEventImpl<OHChatIn, OHMessageIn> implements OnChatInEvent {
 
-        public OnChatOutEventImpl(OHChatOut chatOut, HMessage hMessage) {
-            this.chatOut = chatOut;
-            this.hMessage = hMessage;
-        }
-
-        @Override
-        public void silenceMessage() {
-            hMessage.setBlocked(true);
+        public OnChatInEventImpl(OHChatIn chatIn, OHMessageIn message) {
+            super(chatIn, message);
         }
     }
 
-    @ToString(exclude = "hMessage")
-    private static class OnChatInEventImpl implements OnChatInEvent {
-        @Getter
-        private final OHChatIn chatIn;
-        private final HMessage hMessage;
-
-        public OnChatInEventImpl(OHChatIn chatIn, HMessage hMessage) {
-            this.chatIn = chatIn;
-            this.hMessage = hMessage;
-        }
-
-        @Override
-        public void silenceMessage() {
-            hMessage.setBlocked(true);
+    private static class OnChatOutEventImpl extends OHEventImpl<OHChatOut, OHMessageOut> implements OnChatOutEvent {
+        public OnChatOutEventImpl(OHChatOut chatOut, OHMessageOut message) {
+            super(chatOut, message);
         }
     }
 }

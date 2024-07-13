@@ -6,13 +6,11 @@ import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import gearth.services.packet_info.PacketInfo;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 @Getter
 @ToString
 public class OHItem {
@@ -45,7 +43,6 @@ public class OHItem {
         rightWall = matcher.group(5).equals("r");
 
         this.posterId = packetString[4];
-        log.debug(this.toString());
     }
 
     public OHItem(ShockPacketIncoming packet) {

@@ -52,12 +52,12 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onItemAddedEvent(OnItemAddedEvent event) {
-        addItem(event.getItem());
+        addItem(event.get());
     }
 
     @Subscribe
     void onItemUpdatedEvent(OnItemUpdatedEvent event) {
-        addItem(event.getItem());
+        addItem(event.get());
     }
 
     private void addItem(OHItem item) {
@@ -66,25 +66,25 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onItemRemovedEvent(OnItemRemovedEvent event) {
-        itemsInFlat.remove(event.getItemId());
+        itemsInFlat.remove(event.get());
     }
 
     @Subscribe
     void onItemsLoadedEvent(OnItemsLoadedEvent event) {
         itemsInFlat.clear();
-        for (OHItem item : event.getItems()) {
+        for (OHItem item : event.get()) {
             itemsInFlat.put(item.getId(), item);
         }
     }
 
     @Subscribe
     void onActiveObjectAddedEvent(OnActiveObjectAddedEvent event) {
-        addActiveObject(event.getActiveObject());
+        addActiveObject(event.get());
     }
 
     @Subscribe
     void onActiveObjectUpdatedEvent(OnActiveObjectUpdatedEvent event) {
-        addActiveObject(event.getActiveObject());
+        addActiveObject(event.get());
     }
 
     private void addActiveObject(OHActiveObject activeObject) {
@@ -93,21 +93,21 @@ public class OHFlatManagerImpl implements OHFlatManager {
 
     @Subscribe
     void onActiveObjectRemoved(OnActiveObjectRemovedEvent event) {
-        OHActiveObject activeObject = event.getActiveObject();
+        OHActiveObject activeObject = event.get();
         activeObjectsInFlat.remove(activeObject.getId());
     }
 
     @Subscribe
     void onActiveObjectsLoaded(OnActiveObjectsLoadedEvent event) {
         activeObjectsInFlat.clear();
-        for (OHActiveObject activeObject : event.getActiveObjects()) {
+        for (OHActiveObject activeObject : event.get()) {
             activeObjectsInFlat.put(activeObject.getId(), activeObject);
         }
     }
 
     @Subscribe
     void updateFlatInfo(OnFlatInfoEvent event) {
-        OHFlatInfo flatInfo = event.getFlatInfo();
+        OHFlatInfo flatInfo = event.get();
         if (currentFlatInfo == null || currentFlatInfo.getFlatId() != flatInfo.getFlatId()) {
             activeObjectsInFlat.clear();
             itemsInFlat.clear();

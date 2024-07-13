@@ -1,6 +1,7 @@
 package com.simonflarup.gearth.origins.events.activeobject;
 
-public interface OnStuffDataUpdatedEvent {
-    int getTargetId();
-    String getNewData();
+import com.simonflarup.gearth.origins.events.OHEvent;
+import com.simonflarup.gearth.origins.models.incoming.room.OHStuffData;
+
+public interface OnStuffDataUpdatedEvent extends OHEvent<OHStuffData> {
 }

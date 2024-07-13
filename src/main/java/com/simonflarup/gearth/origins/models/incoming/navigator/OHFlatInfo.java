@@ -3,11 +3,9 @@ package com.simonflarup.gearth.origins.models.incoming.navigator;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @ToString
-@Slf4j
 public class OHFlatInfo {
     private final boolean othersCanMoveFurni;
     private final OHFlatLock flatLock;
@@ -37,7 +35,5 @@ public class OHFlatInfo {
         alertForNoCategory = packet.readBoolean();
         maxVisitors = packet.readInteger();
         absoluteMaxVisitors = packet.readInteger();
-
-        log.debug(this.toString());
     }
 }

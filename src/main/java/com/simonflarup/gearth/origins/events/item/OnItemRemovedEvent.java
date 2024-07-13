@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins.events.item;
 
-public interface OnItemRemovedEvent {
-    int getItemId();
+import com.simonflarup.gearth.origins.events.OHEvent;
+
+public interface OnItemRemovedEvent extends OHEvent<Integer> {
 }

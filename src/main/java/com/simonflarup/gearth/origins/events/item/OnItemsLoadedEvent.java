@@ -1,7 +1,7 @@
 package com.simonflarup.gearth.origins.events.item;
 
+import com.simonflarup.gearth.origins.events.OHEvent;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
 
-public interface OnItemsLoadedEvent {
-    OHItem[] getItems();
+public interface OnItemsLoadedEvent extends OHEvent<OHItem[]> {
 }

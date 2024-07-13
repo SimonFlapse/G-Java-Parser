@@ -1,0 +1,42 @@
+package com.simonflarup.gearth.origins.internal.packets;
+
+import com.simonflarup.gearth.origins.internal.OHContext;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
+import gearth.protocol.HMessage;
+import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
+import lombok.Getter;
+
+public final class OHMessageIn implements OHMessage {
+    private final HMessage message;
+    @Getter
+    private final ShockPacketIncoming packet;
+    @Getter
+    private final OHContext context;
+
+    public OHMessageIn(HMessage message, OHContext context) {
+        this.message = message;
+        this.packet = ShockPacketUtils.getShockPacketIncomingFromMessage(message);
+
+        if (this.packet == null) {
+            throw new WrongShockPacketFormatException("Message is not an incoming packet.");
+        }
+
+        this.context = context;
+    }
+
+    public boolean isBlocked() {
+        return message.isBlocked();
+    }
+
+    public void setBlocked(boolean blocked) {
+        message.setBlocked(blocked);
+    }
+
+    public HMessage.Direction getDestination() {
+        return message.getDestination();
+    }
+
+    public boolean isCorrupted() {
+        return message.isCorrupted();
+    }
+}

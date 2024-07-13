@@ -1,14 +1,9 @@
 package com.simonflarup.gearth.origins.internal.intercepts;
 
-import com.simonflarup.gearth.origins.OHExtension;
 import com.simonflarup.gearth.origins.internal.OHContext;
-import com.simonflarup.gearth.origins.internal.events.IncomingPacketHandler;
-import com.simonflarup.gearth.origins.internal.events.OutgoingPacketHandler;
-import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
+import com.simonflarup.gearth.origins.internal.packets.*;
 import gearth.extensions.ExtensionBase;
 import gearth.protocol.HMessage;
-import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
-import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,28 +25,26 @@ public class OHInterceptor {
     }
 
     public void setupInterceptors() {
-        interceptToClient("ITEMS", (message) -> ItemsIntercept.onItems(message, context));
-        interceptToClient("ITEMS_2", (message) -> ItemsIntercept.onItemsAdd(message, context));
-        interceptToClient("UPDATEITEM", (message) -> ItemsIntercept.onItemsUpdate(message, context));
-        interceptToClient("REMOVEITEM", (message) -> ItemsIntercept.onItemsRemove(message, context));
-        interceptToClient("ACTIVEOBJECTS", (message) -> ActiveObjectsIntercept.onActiveObjects(message, context));
-        interceptToClient("ACTIVEOBJECT_ADD", (message) -> ActiveObjectsIntercept.onActiveObjectsAdd(message, context));
-        interceptToClient("ACTIVEOBJECT_UPDATE", (message) -> ActiveObjectsIntercept.onActiveObjectsUpdate(message, context));
-        interceptToClient("ACTIVEOBJECT_REMOVE", (message) -> ActiveObjectsIntercept.onActiveObjectsRemove(message, context));
-        interceptToClient("STUFFDATAUPDATE", (message) -> ActiveObjectsIntercept.onStuffDataUpdate(message, context));
-        interceptToClient("FLATINFO", (message) -> FlatIntercept.onFlatInfo(message, context));
+        interceptToClient("ITEMS", ItemsIntercept::onItems);
+        interceptToClient("ITEMS_2", ItemsIntercept::onItemsAdd);
+        interceptToClient("UPDATEITEM", ItemsIntercept::onItemsUpdate);
+        interceptToClient("REMOVEITEM", ItemsIntercept::onItemsRemove);
+        interceptToClient("ACTIVEOBJECTS", ActiveObjectsIntercept::onActiveObjects);
+        interceptToClient("ACTIVEOBJECT_ADD", ActiveObjectsIntercept::onActiveObjectsAdd);
+        interceptToClient("ACTIVEOBJECT_UPDATE", ActiveObjectsIntercept::onActiveObjectsUpdate);
+        interceptToClient("ACTIVEOBJECT_REMOVE", ActiveObjectsIntercept::onActiveObjectsRemove);
+        interceptToClient("STUFFDATAUPDATE", ActiveObjectsIntercept::onStuffDataUpdate);
+        interceptToClient("FLATINFO", FlatIntercept::onFlatInfo);
 
-        interceptToServer("ADDSTRIPITEM", (message) -> StripIntercept.onAddStripItem(message, context));
+        interceptToServer("ADDSTRIPITEM", StripIntercept::onAddStripItem);
 
-        OHExtension extension = context.getExtension();
-        // The chat intercept needs the original hMessage to block it from being sent to the server
-        extension.intercept(HMessage.Direction.TOSERVER, "CHAT", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
-        extension.intercept(HMessage.Direction.TOSERVER, "WHISPER", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
-        extension.intercept(HMessage.Direction.TOSERVER, "SHOUT", safeInvoke((message) -> ChatIntercept.onChatOut(message, context)));
+        interceptToServer("CHAT", ChatIntercept::onChatOut);
+        interceptToServer("WHISPER", ChatIntercept::onChatOut);
+        interceptToServer("SHOUT", ChatIntercept::onChatOut);
 
-        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
-        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT_2", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
-        extension.intercept(HMessage.Direction.TOCLIENT, "CHAT_3", safeInvoke((message) -> ChatIntercept.onChatIn(message, context)));
+        interceptToClient("CHAT", ChatIntercept::onChatIn);
+        interceptToClient("CHAT_2", ChatIntercept::onChatIn);
+        interceptToClient("CHAT_3", ChatIntercept::onChatIn);
     }
 
     private void interceptToClient(String header, IncomingPacketHandler incomingPacketHandler) {
@@ -59,11 +52,12 @@ public class OHInterceptor {
     }
 
     private void handleEvent(HMessage hMessage, IncomingPacketHandler incomingPacketHandler) {
-        ShockPacketIncoming packet = ShockPacketUtils.getShockPacketIncomingFromMessage(hMessage);
-        if (packet == null) {
-            return;
+        try {
+            OHMessageIn message = new OHMessageIn(hMessage, context);
+            incomingPacketHandler.handlePacket(message);
+        } catch (WrongShockPacketFormatException exception) {
+            log.error("Failed to handle packet", exception);
         }
-        incomingPacketHandler.handlePacket(packet);
     }
 
     private void interceptToServer(String header, OutgoingPacketHandler outgoingPacketHandler) {
@@ -71,10 +65,11 @@ public class OHInterceptor {
     }
 
     private void handleEvent(HMessage hMessage, OutgoingPacketHandler outgoingPacketHandler) {
-        ShockPacketOutgoing packet = ShockPacketUtils.getShockPacketOutgoingFromMessage(hMessage);
-        if (packet == null) {
-            return;
+        try {
+            OHMessageOut message = new OHMessageOut(hMessage, context);
+            outgoingPacketHandler.handlePacket(message);
+        } catch (WrongShockPacketFormatException exception) {
+            log.error("Failed to handle packet", exception);
         }
-        outgoingPacketHandler.handlePacket(packet);
     }
 }
