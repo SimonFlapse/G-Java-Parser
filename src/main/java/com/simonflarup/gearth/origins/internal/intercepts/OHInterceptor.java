@@ -43,6 +43,17 @@ public class OHInterceptor {
 
         interceptToServer("PLACESTUFF", StuffIntercept::onPlaceStuff);
 
+        interceptToServer("TRADE_OPEN", TradeIntercept::onTradeOpen);
+        interceptToServer("TRADE_ADDITEM", TradeIntercept::onTradeAddItem);
+        interceptToServer("TRADE_ACCEPT", TradeIntercept::onTradeAccept);
+        interceptToServer("TRADE_UNACCEPT", TradeIntercept::onTradeAccept);
+        interceptToServer("TRADE_CLOSE", TradeIntercept::onTradeClose);
+
+        interceptToClient("TRADE_ACCEPT", TradeIntercept::onTradeAccepted);
+        interceptToClient("TRADE_CLOSE", TradeIntercept::onTradeClosed);
+        interceptToClient("TRADE_COMPLETED_2", TradeIntercept::onTradeCompleted);
+        interceptToClient("TRADE_ITEMS", TradeIntercept::onTradeItems);
+
         interceptToServer("CHAT", ChatIntercept::onChatOut);
         interceptToServer("WHISPER", ChatIntercept::onChatOut);
         interceptToServer("SHOUT", ChatIntercept::onChatOut);

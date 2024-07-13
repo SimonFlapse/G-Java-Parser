@@ -30,6 +30,12 @@ public abstract class OHStripInfo {
     }
 
     public static OHStripInfos parse(ShockPacketIncoming packet) {
+        OHStripInfo[] stripInfos = getOHStripInfoArray(packet);
+        int totalInStrip = packet.readInteger();
+        return new OHStripInfos(stripInfos, totalInStrip);
+    }
+
+    static OHStripInfo[] getOHStripInfoArray(ShockPacketIncoming packet) {
         int count = packet.readInteger();
         OHStripInfo[] stripInfos = new OHStripInfo[count];
         for (int i = 0; i < count; i++) {
@@ -44,8 +50,7 @@ public abstract class OHStripInfo {
 
             stripInfos[i] = stripInfo;
         }
-        int totalInStrip = packet.readInteger();
-        return new OHStripInfos(stripInfos, totalInStrip);
+        return stripInfos;
     }
 
     protected void appendToPacket(ShockPacketIncoming packet) {
