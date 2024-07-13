@@ -1,14 +1,14 @@
 package com.simonflarup.gearth.origins.internal;
 
 import com.simonflarup.gearth.origins.InternalExtensionProvider;
-import com.simonflarup.gearth.origins.OHExtension;
 import com.simonflarup.gearth.origins.internal.events.EventSystem;
+import gearth.extensions.ExtensionBase;
 import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 
 @Getter
 public class OHContextImpl implements OHContext {
-    private final OHExtension extension;
+    private final ExtensionBase extension;
     private final EventSystem eventSystem;
 
     public OHContextImpl(InternalExtensionProvider extensionProvider, EventSystem eventSystem) {

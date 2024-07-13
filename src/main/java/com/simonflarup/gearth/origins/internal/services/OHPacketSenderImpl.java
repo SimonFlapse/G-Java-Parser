@@ -1,15 +1,15 @@
 package com.simonflarup.gearth.origins.internal.services;
 
-import com.simonflarup.gearth.origins.OHExtension;
 import com.simonflarup.gearth.origins.models.incoming.OHClientPacket;
 import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
 import com.simonflarup.gearth.origins.services.OHPacketSender;
+import gearth.extensions.ExtensionBase;
 
 public class OHPacketSenderImpl implements OHPacketSender {
 
-    private final OHExtension extension;
+    private final ExtensionBase extension;
 
-    OHPacketSenderImpl(OHExtension extension) {
+    OHPacketSenderImpl(ExtensionBase extension) {
         this.extension = extension;
     }
 

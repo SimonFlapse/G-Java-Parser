@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins;
 
+import gearth.extensions.ExtensionBase;
 import lombok.Getter;
 
 /**
@@ -7,9 +8,9 @@ import lombok.Getter;
  */
 @Getter
 public final class InternalExtensionProvider {
-    private final OHExtension extension;
+    private final ExtensionBase extension;
 
-    InternalExtensionProvider(OHExtension extension) {
+    InternalExtensionProvider(ExtensionBase extension) {
         this.extension = extension;
     }
 }
