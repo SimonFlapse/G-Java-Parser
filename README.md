@@ -49,6 +49,7 @@ import com.simonflarup.gearth.origins.events.flat.OnFlatInfoEvent;
 import com.simonflarup.gearth.origins.models.outgoing.chat.OHChatOut;
 import com.simonflarup.gearth.origins.models.outgoing.chat.OHChatOutType;
 import com.simonflarup.gearth.origins.services.OHFlatManager;
+import gearth.extensions.ExtensionInfo;
 import gearth.protocol.HPacket;
 
 /**
@@ -61,39 +62,45 @@ import gearth.protocol.HPacket;
  * that can be used to parse and send G-Java-Parser models
  * </p>
  */
+@ExtensionInfo(
+        Title = "Example Extension",
+        Description = "An example of a G-Earth extension for Habbo Hotel: Origins that uses the G-Java-Parser library",
+        Version = "1.0.0",
+        Author = "SimonFlapse"
+)
 public class ExampleExtension extends OHExtension {
-    /**
-     * Instantiates the G-Java-Parser library
-     *
-     * @param args The arguments passed to the extension from the command line
-     */
-    protected ExampleExtension(String[] args) {
-        super(args);
-    }
+  /**
+   * Instantiates the G-Java-Parser library
+   *
+   * @param args The arguments passed to the extension from the command line
+   */
+  protected ExampleExtension(String[] args) {
+    super(args);
+  }
 
-    @Subscribe
-    public void onFlatInfoEvent(OnFlatInfoEvent event) {
-        // This example logs the flat info event to the console
-        System.out.println("Flat info event: " + event.get());
-    }
+  @Subscribe
+  public void onFlatInfoEvent(OnFlatInfoEvent event) {
+    // This example logs the flat info event to the console
+    System.out.println("Flat info event: " + event.get());
+  }
 
-    @Subscribe
-    public void onChatOutEvent(OnChatOutEvent event) {
-        // This example makes the user whisper all the floor items in the flat whenever they send any chat message
-        // It makes use of the G-Java-Parser provided services, OHFlatManager to fetch all the floor items in the room
-        // and OHPacketSender to send a preformatted whisper message to the server
-        OHFlatManager flatManager = getServiceProvider().getFlatManager();
-        flatManager.getActiveObjectsInFlat().forEach((objectId, object) -> {
-            OHChatOut chatOut = new OHChatOut(String.format("%d: %s", objectId, object.toString()), OHChatOutType.WHISPER);
-            getServiceProvider().getPacketSender().toServer(chatOut);
-        });
-    }
+  @Subscribe
+  public void onChatOutEvent(OnChatOutEvent event) {
+    // This example makes the user whisper all the floor items in the flat whenever they send any chat message
+    // It makes use of the G-Java-Parser provided services, OHFlatManager to fetch all the floor items in the room
+    // and OHPacketSender to send a preformatted whisper message to the server
+    OHFlatManager flatManager = getServiceProvider().getFlatManager();
+    flatManager.getActiveObjectsInFlat().forEach((objectId, object) -> {
+      OHChatOut chatOut = new OHChatOut(String.format("%d: %s", objectId, object.toString()), OHChatOutType.WHISPER);
+      getServiceProvider().getPacketSender().toServer(chatOut);
+    });
+  }
 
-    // The main method to start the extension while developing.
-    // Remember to add the `-p 9092` argument to the command line
-    public static void main(String[] args) {
-        new ExampleExtension(args).run();
-    }
+  // The main method to start the extension while developing.
+  // Remember to add the `-p 9092` argument to the command line
+  public static void main(String[] args) {
+    new ExampleExtension(args).run();
+  }
 }
 ```
 
