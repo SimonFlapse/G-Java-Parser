@@ -51,6 +51,11 @@ class OHGetStripTest {
             assertOutgoingPacket(OHGetStrip.OHGetStripCommand.PREVIOUS);
         }
 
+        @Test
+        void forUpdateCommand() {
+            assertOutgoingPacket(OHGetStrip.OHGetStripCommand.UPDATE);
+        }
+
         private void assertOutgoingPacket(OHGetStrip.OHGetStripCommand command) {
             OHGetStrip getStrip = new OHGetStrip(command);
             packet = getStrip.getOutgoingPacket(packetInfoManager);
@@ -76,6 +81,11 @@ class OHGetStripTest {
         @Test
         void parsesShockPacketForPreviousCommand() {
             assertShockPacketParsing(OHGetStrip.OHGetStripCommand.PREVIOUS);
+        }
+
+        @Test
+        void parsesShockPacketForUpdateCommand() {
+            assertShockPacketParsing(OHGetStrip.OHGetStripCommand.UPDATE);
         }
 
         private void assertShockPacketParsing(OHGetStrip.OHGetStripCommand command) {

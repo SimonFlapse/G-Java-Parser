@@ -37,7 +37,8 @@ public class OHGetStrip implements OHServerPacket {
     public enum OHGetStripCommand {
         NEW("new"),
         NEXT("next"),
-        PREVIOUS("prev");
+        PREVIOUS("prev"),
+        UPDATE("update");
 
         public static OHGetStripCommand fromString(String command) {
             for (OHGetStripCommand value : values()) {
