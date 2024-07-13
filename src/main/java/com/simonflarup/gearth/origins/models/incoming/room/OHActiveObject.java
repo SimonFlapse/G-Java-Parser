@@ -44,10 +44,6 @@ public class OHActiveObject {
     public static OHActiveObject[] parse(ShockPacket packet) {
         int size = packet.readInteger();
 
-        if(size == 0){
-            size = 1;
-        }
-
         OHActiveObject[] entities = new OHActiveObject[size];
 
         for(int i = 0; i < entities.length; ++i) {
