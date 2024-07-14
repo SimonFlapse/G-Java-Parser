@@ -13,12 +13,12 @@ Library for G-Earth extensions made for Habbo Hotel: Origins
 To get started use this command:
 
 ```
-mvn install:install-file -Dfile=G-Java-Parser-0.2.0.jar -DgroupId=com.simonflarup.gearth -DartifactId=G-Java-Parser -Dversion=0.2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=G-Java-Parser-0.3.0.jar -DgroupId=com.simonflarup.gearth -DartifactId=G-Java-Parser -Dversion=0.3.0 -Dpackaging=jar
 ```
 
 Alternatively you can manually install this artifact into maven similarly to how G-Earth.jar is installed (
 See [mvn install-file](https://github.com/sirjonasxx/G-ExtensionStore/wiki/Native-Extension#setting-up-your-maven-environment) -
-Replacing `G-Earth.jar` with `G-Java-Parser-0.2.0.jar` in the maven commands)
+Replacing `G-Earth.jar` with `G-Java-Parser-0.3.0.jar` in the maven commands)
 
 ### Add dependency
 
@@ -30,7 +30,7 @@ Then add the following dependency to your `pom.xml`:
     <dependency>
         <groupId>com.simonflarup.gearth</groupId>
         <artifactId>G-Java-Parser</artifactId>
-        <version>0.2.0</version>
+      <version>0.3.0</version>
     </dependency>
 </dependencies>
 ```
@@ -127,7 +127,7 @@ public class ExampleExtension extends OHExtension {
         <dependency>
             <groupId>com.simonflarup.gearth</groupId>
             <artifactId>G-Java-Parser</artifactId>
-            <version>0.2.0</version>
+          <version>0.3.0</version>
         </dependency>
     </dependencies>
 </project>
