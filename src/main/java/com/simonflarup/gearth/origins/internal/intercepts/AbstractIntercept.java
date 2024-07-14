@@ -2,6 +2,7 @@ package com.simonflarup.gearth.origins.internal.intercepts;
 
 import com.simonflarup.gearth.origins.events.OHEvent;
 import com.simonflarup.gearth.origins.internal.packets.OHMessage;
+import gearth.protocol.HMessage;
 import lombok.ToString;
 
 class AbstractIntercept {
@@ -23,6 +24,21 @@ class AbstractIntercept {
         @Override
         public void silenceMessage() {
             this.message.setBlocked(true);
+        }
+
+        @Override
+        public boolean isSilenced() {
+            return this.message.isBlocked();
+        }
+
+        @Override
+        public boolean isCorrupted() {
+            return this.message.isCorrupted();
+        }
+
+        @Override
+        public Destination getDestination() {
+            return this.message.getDestination() == HMessage.Direction.TOCLIENT ? Destination.CLIENT : Destination.SERVER;
         }
     }
 }
