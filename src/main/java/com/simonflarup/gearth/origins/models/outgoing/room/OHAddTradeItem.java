@@ -1,6 +1,7 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
 import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import gearth.services.packet_info.PacketInfo;
@@ -14,8 +15,7 @@ public class OHAddTradeItem implements OHServerPacket {
     private final int itemId;
 
     public OHAddTradeItem(ShockPacketOutgoing packet) {
-        String rawMessage = packet.toString();
-        rawMessage = rawMessage.substring(2);
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
         this.itemId = Integer.parseInt(rawMessage);
     }
 

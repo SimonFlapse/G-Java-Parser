@@ -7,9 +7,8 @@ import com.simonflarup.gearth.origins.events.item.OnItemsLoadedEvent;
 import com.simonflarup.gearth.origins.internal.events.EventPublisher;
 import com.simonflarup.gearth.origins.internal.packets.OHMessageIn;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
-
-import java.nio.charset.StandardCharsets;
 
 class ItemsIntercept extends AbstractIntercept {
     static void onItemsAdd(OHMessageIn message) {
@@ -25,10 +24,8 @@ class ItemsIntercept extends AbstractIntercept {
     static void onItemsRemove(OHMessageIn message) {
         ShockPacketIncoming packet = message.getPacket();
 
-        int headerBytes = 2;
-        final byte[] dataRemainder = packet.readBytes(packet.getBytesLength() - headerBytes, headerBytes);
-        String data = new String(dataRemainder, StandardCharsets.ISO_8859_1);
-        int id = Integer.parseInt(data);
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
+        int id = Integer.parseInt(rawMessage);
 
         message.getContext().getEventSystem().post(new OnItemRemovedEventImpl(id, message));
     }

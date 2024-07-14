@@ -1,14 +1,13 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
 import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import gearth.services.packet_info.PacketInfo;
 import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.nio.charset.StandardCharsets;
 
 @Getter
 @ToString
@@ -29,7 +28,7 @@ public class OHGetStrip implements OHServerPacket {
     public ShockPacketOutgoing getOutgoingPacket(PacketInfoManager packetInfoManager) {
         PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, "GETSTRIP");
         ShockPacketOutgoing packet = new ShockPacketOutgoing(packetInfo.getHeaderId());
-        packet.appendBytes(command.getCommand().getBytes(StandardCharsets.ISO_8859_1));
+        ShockPacketUtils.appendRawMessage(command.getCommand(), packet);
         return packet;
     }
 

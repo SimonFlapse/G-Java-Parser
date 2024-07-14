@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,8 +12,7 @@ public class OHTradeAccepted {
     private final OHTradeAcceptType type;
 
     public OHTradeAccepted(ShockPacketIncoming packet) {
-        String rawMessage = packet.toString();
-        rawMessage = rawMessage.substring(2);
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
         String[] data = rawMessage.split("/");
 
         this.username = data[0];

@@ -1,6 +1,7 @@
 package com.simonflarup.gearth.origins.models.incoming.chat;
 
 import com.simonflarup.gearth.origins.models.incoming.OHClientPacket;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacket;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
@@ -8,8 +9,6 @@ import gearth.services.packet_info.PacketInfo;
 import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.nio.charset.StandardCharsets;
 
 @Getter
 @ToString
@@ -22,7 +21,7 @@ public class OHChatIn implements OHClientPacket {
         PacketInfo info = packetInfoManager.getPacketInfoFromHeaderId(HMessage.Direction.TOCLIENT, packet.headerId());
         this.type = OHChatInType.fromName(info.getName());
         this.speakerId = packet.readInteger();
-        this.message = packet.readString(StandardCharsets.ISO_8859_1);
+        this.message = packet.readString();
     }
 
     public OHChatIn(int speakerId, String message, OHChatInType type) {
@@ -37,7 +36,7 @@ public class OHChatIn implements OHClientPacket {
         PacketInfo packetInfo = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOCLIENT, headerName);
         ShockPacketIncoming packet = new ShockPacketIncoming(packetInfo.getHeaderId());
         packet.appendInt(this.speakerId);
-        packet.appendBytes(this.message.getBytes(StandardCharsets.ISO_8859_1));
+        ShockPacketUtils.appendRawMessage(this.message, packet);
         packet.appendByte((byte) 2);
         return packet;
     }

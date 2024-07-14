@@ -1,13 +1,12 @@
 package com.simonflarup.gearth.origins.models.outgoing.room;
 
 import com.simonflarup.gearth.origins.models.outgoing.OHServerPacket;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketOutgoing;
 import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.nio.charset.StandardCharsets;
 
 @Getter
 @ToString
@@ -19,7 +18,7 @@ public abstract class OHPlaceStuff implements OHServerPacket {
     }
 
     public static OHPlaceStuff parse(ShockPacketOutgoing packet) {
-        String rawMessage = packet.toString();
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
         if (rawMessage.contains(":w=") && rawMessage.contains("l=")) {
             return new Item(packet);
         } else {
@@ -28,8 +27,7 @@ public abstract class OHPlaceStuff implements OHServerPacket {
     }
 
     private static String[] getSplitMessage(ShockPacketOutgoing packet) {
-        String rawMessage = packet.toString();
-        rawMessage = rawMessage.substring(2);
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
         return rawMessage.split(" ");
     }
 
@@ -66,7 +64,7 @@ public abstract class OHPlaceStuff implements OHServerPacket {
             int headerId = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, "PLACESTUFF").getHeaderId();
             ShockPacketOutgoing packet = new ShockPacketOutgoing(headerId);
             String rawMessage = String.format("%d %d %d %d %d %d", this.getItemId(), this.x, this.y, this.width, this.height, this.z);
-            packet.appendBytes(rawMessage.getBytes(StandardCharsets.ISO_8859_1));
+            ShockPacketUtils.appendRawMessage(rawMessage, packet);
             return packet;
         }
     }
@@ -107,7 +105,7 @@ public abstract class OHPlaceStuff implements OHServerPacket {
             int headerId = packetInfoManager.getPacketInfoFromName(HMessage.Direction.TOSERVER, "PLACESTUFF").getHeaderId();
             ShockPacketOutgoing packet = new ShockPacketOutgoing(headerId);
             String rawMessage = String.format("%d :w=%d,%d l=%d,%d %s", this.getItemId(), this.wallX, this.wallY, this.localX, this.localY, this.rightWall ? "r" : "l");
-            packet.appendBytes(rawMessage.getBytes(StandardCharsets.ISO_8859_1));
+            ShockPacketUtils.appendRawMessage(rawMessage, packet);
             return packet;
         }
     }

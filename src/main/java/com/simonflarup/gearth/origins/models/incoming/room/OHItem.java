@@ -1,13 +1,13 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
 import com.simonflarup.gearth.origins.models.incoming.OHClientPacket;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import gearth.services.packet_info.PacketInfo;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,18 +52,15 @@ public class OHItem {
     private static String[] parsePacket(ShockPacketIncoming packet) {
         String input = packet.readString();
         if (input.isEmpty()) {
-            int headerBytes = 2;
-            final byte[] dataRemainder = packet.readBytes(packet.getBytesLength() - headerBytes, headerBytes);
-            input = new String(dataRemainder, StandardCharsets.ISO_8859_1);
+            input = ShockPacketUtils.getRawMessage(packet);
         }
         input = input.replace("\r", "");
         return input.split("\t");
     }
 
     public static OHItem[] parse(ShockPacketIncoming packet) {
-        final byte[] dataRemainder = packet.readBytes(packet.getBytesLength() - packet.getReadIndex());
-        String data = new String(dataRemainder, StandardCharsets.ISO_8859_1);
-        String[] packets = data.split("\r\u0002");
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
+        String[] packets = rawMessage.split("\r\u0002");
         packet.resetReadIndex();
         int i;
         OHItem[] entities = new OHItem[packets.length];

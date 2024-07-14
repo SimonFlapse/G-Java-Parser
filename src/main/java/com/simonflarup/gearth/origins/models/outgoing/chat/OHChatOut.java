@@ -9,8 +9,6 @@ import gearth.services.packet_info.PacketInfoManager;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.nio.charset.StandardCharsets;
-
 @Getter
 @ToString
 public class OHChatOut implements OHServerPacket {
@@ -22,7 +20,7 @@ public class OHChatOut implements OHServerPacket {
         PacketInfo info = packetInfoManager.getPacketInfoFromHeaderId(HMessage.Direction.TOSERVER, packet.headerId());
         this.type = OHChatOutType.fromName(info.getName());
 
-        String message = packet.readString(StandardCharsets.ISO_8859_1);
+        String message = packet.readString();
         String targetUser = "";
 
         if (type == OHChatOutType.WHISPER) {

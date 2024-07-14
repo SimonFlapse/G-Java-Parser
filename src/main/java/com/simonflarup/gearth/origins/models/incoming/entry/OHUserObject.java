@@ -1,12 +1,12 @@
 package com.simonflarup.gearth.origins.models.incoming.entry;
 
 import com.simonflarup.gearth.origins.models.incoming.OHBinaryGender;
+import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +29,7 @@ public class OHUserObject {
     private final boolean offlineMessagingEnabled;
 
     public OHUserObject(ShockPacketIncoming packet) {
-        final byte[] dataRemainder = packet.readBytes(packet.getBytesLength() - packet.getReadIndex());
-        String rawMessage = new String(dataRemainder, StandardCharsets.ISO_8859_1);
+        String rawMessage = ShockPacketUtils.getRawMessage(packet);
         String[] dataLine = rawMessage.split("\r");
         Map<String, String> dataMap = new HashMap<>();
         for (String data : dataLine) {
