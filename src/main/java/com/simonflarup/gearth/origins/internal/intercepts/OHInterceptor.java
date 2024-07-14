@@ -54,6 +54,12 @@ public class OHInterceptor {
         interceptToClient("TRADE_COMPLETED_2", TradeIntercept::onTradeCompleted);
         interceptToClient("TRADE_ITEMS", TradeIntercept::onTradeItems);
 
+        interceptToServer("INFORETRIEVE", UserIntercept::onInfoRetrieve);
+
+        interceptToClient("USER_OBJ", UserIntercept::onUserObj);
+        interceptToClient("USERS", UserIntercept::onUsers);
+        interceptToClient("LOGOUT", UserIntercept::onLogOut);
+
         interceptToServer("CHAT", ChatIntercept::onChatOut);
         interceptToServer("WHISPER", ChatIntercept::onChatOut);
         interceptToServer("SHOUT", ChatIntercept::onChatOut);
