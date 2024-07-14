@@ -66,7 +66,7 @@ public class OHItem {
         String[] packets = data.split("\r\u0002");
         packet.resetReadIndex();
         int i;
-        OHItem[] entities = new OHItem[(packets.length)];
+        OHItem[] entities = new OHItem[packets.length];
 
         for(i = 0; i < packets.length; i++) {
             entities[i] = new OHItem(packet);

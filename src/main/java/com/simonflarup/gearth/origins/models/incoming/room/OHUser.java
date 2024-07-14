@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
+import com.simonflarup.gearth.origins.models.incoming.OHBinaryGender;
 import com.simonflarup.gearth.origins.models.incoming.OHClientPacket;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
@@ -16,7 +17,7 @@ public class OHUser implements OHClientPacket {
     private final String userName;
     @Getter(AccessLevel.PACKAGE)
     private final String rawFigureData;
-    private final BinaryGender binaryGender;
+    private final OHBinaryGender binaryGender;
     private final String motto;
     private final int x;
     private final int y;
@@ -30,7 +31,7 @@ public class OHUser implements OHClientPacket {
         this.userRoomId = packet.readInteger();
         this.userName = packet.readString();
         this.rawFigureData = packet.readString();
-        this.binaryGender = packet.readString().equalsIgnoreCase("f") ? BinaryGender.FEMALE : BinaryGender.MALE;
+        this.binaryGender = packet.readString().equalsIgnoreCase("f") ? OHBinaryGender.FEMALE : OHBinaryGender.MALE;
         this.motto = packet.readString();
         this.x = packet.readInteger();
         this.y = packet.readInteger();
@@ -40,7 +41,7 @@ public class OHUser implements OHClientPacket {
         this.userType = UserType.fromId(packet.readInteger());
     }
 
-    public OHUser(int userRoomId, String userName, String rawFigureData, BinaryGender binaryGender, String motto, int x, int y, float z, String badgeCode, UserType userType) {
+    public OHUser(int userRoomId, String userName, String rawFigureData, OHBinaryGender binaryGender, String motto, int x, int y, float z, String badgeCode, UserType userType) {
         this.userRoomId = userRoomId;
         this.userName = userName;
         this.rawFigureData = rawFigureData;
@@ -90,7 +91,7 @@ public class OHUser implements OHClientPacket {
         packet.appendInt(user.userRoomId);
         packet.appendString(user.userName);
         packet.appendString(user.rawFigureData);
-        packet.appendString(user.binaryGender == BinaryGender.FEMALE ? "f" : "m");
+        packet.appendString(user.binaryGender == OHBinaryGender.FEMALE ? "f" : "m");
         packet.appendString(user.motto);
         packet.appendInt(user.x);
         packet.appendInt(user.y);
@@ -103,12 +104,6 @@ public class OHUser implements OHClientPacket {
     @Override
     public ShockPacketIncoming getIncomingPacket(PacketInfoManager packetInfoManager) {
         return serializeToPacket(packetInfoManager, new OHUser[]{this});
-    }
-
-
-    public enum BinaryGender {
-        MALE,
-        FEMALE
     }
 
     @Getter

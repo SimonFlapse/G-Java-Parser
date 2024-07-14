@@ -1,5 +1,6 @@
 package com.simonflarup.gearth.origins.models.incoming.room;
 
+import com.simonflarup.gearth.origins.models.incoming.OHBinaryGender;
 import gearth.encoding.VL64Encoding;
 import gearth.protocol.HMessage;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
@@ -32,10 +33,10 @@ class OHUserTest {
 
     private OHUser[] getUserList() {
         OHUser[] users = new OHUser[4];
-        users[0] = new OHUser(1, "user1", "figure1", OHUser.BinaryGender.FEMALE, "motto1", 1, 2, 3.0f, "badge1", OHUser.UserType.USER);
-        users[1] = new OHUser(2, "user2", "figure2", OHUser.BinaryGender.MALE, "motto2", 4, 5, 6.0f, "badge2", OHUser.UserType.PET);
-        users[2] = new OHUser(2, "user3", "figure3", OHUser.BinaryGender.MALE, "motto3", 7, 8, 9.0f, "badge2", OHUser.UserType.PELLE);
-        users[3] = new OHUser(2, "user4", "figure4", OHUser.BinaryGender.MALE, "motto4", 10, 11, 12.0f, "badge2", OHUser.UserType.BOT);
+        users[0] = new OHUser(1, "user1", "figure1", OHBinaryGender.FEMALE, "motto1", 1, 2, 3.0f, "badge1", OHUser.UserType.USER);
+        users[1] = new OHUser(2, "user2", "figure2", OHBinaryGender.MALE, "motto2", 4, 5, 6.0f, "badge2", OHUser.UserType.PET);
+        users[2] = new OHUser(2, "user3", "figure3", OHBinaryGender.MALE, "motto3", 7, 8, 9.0f, "badge2", OHUser.UserType.PELLE);
+        users[3] = new OHUser(2, "user4", "figure4", OHBinaryGender.MALE, "motto4", 10, 11, 12.0f, "badge2", OHUser.UserType.BOT);
 
         return users;
     }
@@ -68,7 +69,7 @@ class OHUserTest {
 
         private String getExpectedPacketStringForUser(OHUser user) {
             String vl64_id = new String(VL64Encoding.encode(user.getUserRoomId()), StandardCharsets.ISO_8859_1);
-            String binaryGenderLetter = user.getBinaryGender() == OHUser.BinaryGender.FEMALE ? "f" : "m";
+            String binaryGenderLetter = user.getBinaryGender() == OHBinaryGender.FEMALE ? "f" : "m";
             String vl64_x = new String(VL64Encoding.encode(user.getX()), StandardCharsets.ISO_8859_1);
             String vl64_y = new String(VL64Encoding.encode(user.getY()), StandardCharsets.ISO_8859_1);
             String zString = String.format("%.1f", user.getZ());
