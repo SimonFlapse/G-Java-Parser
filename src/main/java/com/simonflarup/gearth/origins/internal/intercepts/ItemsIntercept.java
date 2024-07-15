@@ -1,12 +1,10 @@
 package com.simonflarup.gearth.origins.internal.intercepts;
 
-import com.simonflarup.gearth.origins.events.item.OnItemAddedEvent;
-import com.simonflarup.gearth.origins.events.item.OnItemRemovedEvent;
-import com.simonflarup.gearth.origins.events.item.OnItemUpdatedEvent;
-import com.simonflarup.gearth.origins.events.item.OnItemsLoadedEvent;
-import com.simonflarup.gearth.origins.internal.events.EventPublisher;
+import com.simonflarup.gearth.origins.events.item.*;
 import com.simonflarup.gearth.origins.internal.packets.OHMessageIn;
+import com.simonflarup.gearth.origins.internal.packets.OHMessageOut;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
+import com.simonflarup.gearth.origins.models.outgoing.room.OHLoadItems;
 import com.simonflarup.gearth.origins.utils.ShockPacketUtils;
 import gearth.protocol.packethandler.shockwave.packets.ShockPacketIncoming;
 
@@ -31,13 +29,13 @@ class ItemsIntercept extends AbstractIntercept {
     }
 
     static void onItems(OHMessageIn message) {
-        ShockPacketIncoming packet = message.getPacket();
-        EventPublisher eventSystem = message.getContext().getEventSystem();
+        OHItem[] items = OHItem.parse(message.getPacket());
+        message.getContext().getEventSystem().post(new OnItemsLoadedEventImpl(items, message));
+    }
 
-        if (packet.length() > 2) {
-            OHItem[] items = OHItem.parse(packet);
-            eventSystem.post(new OnItemsLoadedEventImpl(items, message));
-        }
+    static void onGetItems(OHMessageOut message) {
+        OHLoadItems loadItems = new OHLoadItems(message.getPacket(), message.getContext().getPacketInfoManager());
+        message.getContext().getEventSystem().post(new OnLoadItemsEventImpl(loadItems, message));
     }
 
     private static class OnItemAddedEventImpl extends OHEventImpl<OHItem, OHMessageIn> implements OnItemAddedEvent {

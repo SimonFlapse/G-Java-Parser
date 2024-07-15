@@ -59,6 +59,11 @@ public class OHItem {
     }
 
     public static OHItem[] parse(ShockPacketIncoming packet) {
+        OHItem[] items = new OHItem[0];
+        if (packet.length() <= 2) {
+            return items;
+        }
+
         String rawMessage = ShockPacketUtils.getRawMessage(packet);
         String[] packets = rawMessage.split("\r\u0002");
         packet.resetReadIndex();

@@ -8,8 +8,7 @@ import com.simonflarup.gearth.origins.models.incoming.room.OHStuffData;
 class ActiveObjectsIntercept extends AbstractIntercept {
     static void onActiveObjectsAdd(OHMessageIn message) {
         OHActiveObject activeObject = new OHActiveObject(message.getPacket());
-        message.getContext().getEventSystem().post(new OnActiveObjectAddedEventImpl(activeObject, message) {
-        });
+        message.getContext().getEventSystem().post(new OnActiveObjectAddedEventImpl(activeObject, message));
     }
 
     static void onActiveObjectsUpdate(OHMessageIn message) {
