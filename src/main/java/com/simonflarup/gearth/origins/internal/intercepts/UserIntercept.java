@@ -1,15 +1,13 @@
 package com.simonflarup.gearth.origins.internal.intercepts;
 
-import com.simonflarup.gearth.origins.events.user.OnProfileInfoEvent;
-import com.simonflarup.gearth.origins.events.user.OnRetrieveProfileInfoEvent;
-import com.simonflarup.gearth.origins.events.user.OnUserExitedRoomEvent;
-import com.simonflarup.gearth.origins.events.user.OnUsersEnteredRoomEvent;
+import com.simonflarup.gearth.origins.events.user.*;
 import com.simonflarup.gearth.origins.internal.packets.OHMessageIn;
 import com.simonflarup.gearth.origins.internal.packets.OHMessageOut;
 import com.simonflarup.gearth.origins.models.incoming.entry.OHUserObject;
 import com.simonflarup.gearth.origins.models.incoming.room.OHLoggedOut;
 import com.simonflarup.gearth.origins.models.incoming.room.OHUser;
 import com.simonflarup.gearth.origins.models.outgoing.registrat.OHInfoRetrieve;
+import com.simonflarup.gearth.origins.models.outgoing.room.OHLoadUsers;
 
 public class UserIntercept extends AbstractIntercept {
     static void onInfoRetrieve(OHMessageOut message) {
@@ -32,6 +30,11 @@ public class UserIntercept extends AbstractIntercept {
         message.getContext().getEventSystem().post(new OnUserExitedRoomEventImpl(loggedOut, message));
     }
 
+    static void onGetUsers(OHMessageOut message) {
+        OHLoadUsers loadUsers = new OHLoadUsers();
+        message.getContext().getEventSystem().post(new OnLoadUsersEventImpl(loadUsers, message));
+    }
+
     private static class OnRetrieveProfileInfoEventImpl extends OHEventImpl<OHInfoRetrieve, OHMessageOut> implements OnRetrieveProfileInfoEvent {
         public OnRetrieveProfileInfoEventImpl(OHInfoRetrieve data, OHMessageOut message) {
             super(data, message);
@@ -52,6 +55,12 @@ public class UserIntercept extends AbstractIntercept {
 
     private static class OnUserExitedRoomEventImpl extends OHEventImpl<OHLoggedOut, OHMessageIn> implements OnUserExitedRoomEvent {
         public OnUserExitedRoomEventImpl(OHLoggedOut data, OHMessageIn message) {
+            super(data, message);
+        }
+    }
+
+    private static class OnLoadUsersEventImpl extends OHEventImpl<OHLoadUsers, OHMessageOut> implements OnLoadUsersEvent {
+        public OnLoadUsersEventImpl(OHLoadUsers data, OHMessageOut message) {
             super(data, message);
         }
     }

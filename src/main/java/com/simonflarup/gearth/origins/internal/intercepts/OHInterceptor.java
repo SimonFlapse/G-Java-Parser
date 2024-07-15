@@ -36,6 +36,9 @@ public class OHInterceptor {
         interceptToClient("STUFFDATAUPDATE", ActiveObjectsIntercept::onStuffDataUpdate);
         interceptToClient("FLATINFO", FlatIntercept::onFlatInfo);
 
+        interceptToServer("G_ITEMS", ItemsIntercept::onGetItems);
+        interceptToServer("G_OBJS", ItemsIntercept::onGetItems);
+
         interceptToServer("ADDSTRIPITEM", StripIntercept::onAddStripItem);
         interceptToClient("REMOVESTRIPITEM", StripIntercept::onRemoveStripItem);
         interceptToServer("GETSTRIP", StripIntercept::onGetStrip);
@@ -55,6 +58,7 @@ public class OHInterceptor {
         interceptToClient("TRADE_ITEMS", TradeIntercept::onTradeItems);
 
         interceptToServer("INFORETRIEVE", UserIntercept::onInfoRetrieve);
+        interceptToServer("G_USRS", UserIntercept::onGetUsers);
 
         interceptToClient("USER_OBJ", UserIntercept::onUserObj);
         interceptToClient("USERS", UserIntercept::onUsers);

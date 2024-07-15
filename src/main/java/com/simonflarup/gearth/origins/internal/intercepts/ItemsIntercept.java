@@ -62,4 +62,9 @@ class ItemsIntercept extends AbstractIntercept {
         }
     }
 
+    private static class OnLoadItemsEventImpl extends OHEventImpl<OHLoadItems, OHMessageOut> implements OnLoadItemsEvent {
+        public OnLoadItemsEventImpl(OHLoadItems data, OHMessageOut message) {
+            super(data, message);
+        }
+    }
 }
