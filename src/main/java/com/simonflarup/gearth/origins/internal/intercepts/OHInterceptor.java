@@ -19,7 +19,7 @@ public class OHInterceptor {
             try {
                 listener.act(hMessage);
             } catch (Exception e) {
-                log.error("Unhandled exception in interceptor", e);
+                log.error(String.format("Unhandled exception in interceptor for packet %s", hMessage.getPacket().toString()), e);
             }
         });
     }
