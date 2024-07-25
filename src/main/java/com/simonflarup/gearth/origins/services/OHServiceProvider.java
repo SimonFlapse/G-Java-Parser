@@ -14,6 +14,14 @@ public interface OHServiceProvider {
     OHFlatManager getFlatManager();
 
     /**
+     * <h3>Profile manager</h3>
+     * <p>Keeps track of information about the active user profile</p>
+     *
+     * @return the profile manager managed by G-Java-Parser
+     */
+    OHProfileManager getProfileManager();
+
+    /**
      * <h3>Packet sender</h3>
      * <p>Allows for sending packets to the server or client using the G-Java-Parser models</p>
      * @return The packet sender provided by G-Java-Parser

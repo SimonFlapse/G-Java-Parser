@@ -3,6 +3,7 @@ package com.simonflarup.gearth.origins.services;
 import com.simonflarup.gearth.origins.models.incoming.navigator.OHFlatInfo;
 import com.simonflarup.gearth.origins.models.incoming.room.OHActiveObject;
 import com.simonflarup.gearth.origins.models.incoming.room.OHItem;
+import com.simonflarup.gearth.origins.models.incoming.room.OHUser;
 
 import java.util.Map;
 
@@ -37,4 +38,13 @@ public interface OHFlatManager {
      * @see #getActiveObjectsInFlat()
      */
     Map<Integer, OHItem> getItemsInFlat();
+
+    /**
+     * <h3>Users in room</h3>
+     * <p>Get a map of all users in the current room</p>
+     * <p>The underlying data is dynamically updated when users enter or leave the room, so avoid storing the map</p>
+     *
+     * @return {@link Map} of users in the current room
+     */
+    Map<Integer, OHUser> getUsersInFlat();
 }

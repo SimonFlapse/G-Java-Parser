@@ -92,7 +92,7 @@ public class ExampleExtension extends OHExtension {
     OHFlatManager flatManager = getServiceProvider().getFlatManager();
     flatManager.getActiveObjectsInFlat().forEach((objectId, object) -> {
       OHChatOut chatOut = new OHChatOut(String.format("%d: %s", objectId, object.toString()), OHChatOutType.WHISPER);
-      getServiceProvider().getPacketSender().toServer(chatOut);
+      getServiceProvider().getPacketSender().scheduleToServer(chatOut);
     });
   }
 
